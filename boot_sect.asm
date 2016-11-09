@@ -1,38 +1,37 @@
-;
-; A simple boot sector that invokes 0x10 "Video Services" interrupt
-; with ah set to 0x0e "Write Character in TTY Mode".
-;
-
-;
-; Tell the assembler where this code will be loaded in memory.
-;
+; Read some sectors from the boot disk using the disk_read function.
 [org 0x7c00]
 
-mov bx, HELLO_MSG
-call print_string
+  mov [BOOT_DRIVE], dl  ; Save boot drive from dl.
+  
+  mov bp, 0x8000        ; Set up stack.
+  mov sp, bp
 
-mov bx, GOODBYE_MSG
-call print_string
+  mov bx, 0x9000        ; Load 5 sectors to 0x0000:0x9000 (es:bx)
+  mov dh, 2             ; from the boot disk.
+  mov dl, [BOOT_DRIVE]
+  call disk_load
 
-mov dx, 0x1fb6
-call print_hex
+  mov dx, [0x9000]      ; Print the first loaded word, which we have
+  call print_hex        ; set below. Should be 0xdada.
 
-jmp $ ; Hang
+  mov dx, [0x9000 + 512] ; Print the first loaded word from the second
+  call print_hex         ; sector. Should be 0xface.
+
+  jmp $     
 
 %include "print_string.asm"
 %include "print_hex.asm"
+%include "disk_load.asm"
 
-; Data
-HELLO_MSG:
-  db "Hello, world!", 0
+; Global variables
+BOOT_DRIVE: db 0
 
-GOODBYE_MSG:
-  db "Goodbye!", 0
-
-;
-; Padding and magic number.
-;
-
+; Bootsector padding
 times 510-($-$$) db 0
 dw 0xaa55
 
+; This is now past the boot sector. We fill this next sector with
+; some values to print to make sure the load worked.
+
+times 256 dw 0xdada
+times 256 dw 0xface
