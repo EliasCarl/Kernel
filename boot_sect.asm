@@ -3,20 +3,27 @@
 ; with ah set to 0x0e "Write Character in TTY Mode".
 ;
 
-mov ah, 0x0e
+;
+; Tell the assembler where this code will be loaded in memory.
+;
+[org 0x7c00]
 
-mov al, 'H'
-int 0x10
-mov al, 'e'
-int 0x10
-mov al, 'l'
-int 0x10
-mov al, 'l'
-int 0x10
-mov al, 'o'
-int 0x10
+mov bx, HELLO_MSG
+call print_string
+
+mov bx, GOODBYE_MSG
+call print_string
 
 jmp $ ; Hang
+
+%include "print_string.asm"
+
+; Data
+HELLO_MSG:
+  db "Hello, world!", 0
+
+GOODBYE_MSG:
+  db "Goodbye!", 0
 
 ;
 ; Padding and magic number.
@@ -24,3 +31,4 @@ jmp $ ; Hang
 
 times 510-($-$$) db 0
 dw 0xaa55
+
