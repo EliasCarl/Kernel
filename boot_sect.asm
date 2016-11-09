@@ -33,5 +33,5 @@ dw 0xaa55
 ; This is now past the boot sector. We fill this next sector with
 ; some values to print to make sure the load worked.
 
-times 256 dw 0xdada
-times 256 dw 0xface
+times 512 dw 0xdada
+times 512 dw 0xface
