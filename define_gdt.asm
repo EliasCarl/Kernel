@@ -8,7 +8,9 @@
 ; Here we start with the "basic flat model". As is seen below both
 ; the code and data segments cover the full 4GB of addressable memory.
 ; This strategy offers nothing in protection, since the segments fully
-; overlap, but allow us to use the flags.
+; overlap, but allow us to use the flags. The reason we don't just use
+; one segment descriptor is because the type field cannot be executable
+; and writable at the same time.
 ;
 ; Segment Descriptor Flags
 ; P   = Presentation
@@ -27,7 +29,7 @@
 
 get_start:
 
-  ; Mandatory null descriptor.
+  ; Mandatory null descriptor. Declare two double words of zeros.
   gdt_null:
     dd 0x0
     dd 0x0
