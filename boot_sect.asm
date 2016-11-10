@@ -1,31 +1,31 @@
-; Read some sectors from the boot disk using the disk_read function.
+; A boot sector that enters 32-bit protected mode.
 [org 0x7c00]
 
-  mov [BOOT_DRIVE], dl  ; Save boot drive from dl.
-  
-  mov bp, 0x8000        ; Set up stack.
+  mov bp, 0x9000        ; Set up stack.
   mov sp, bp
 
-  mov bx, 0x9000        ; Load 5 sectors to 0x0000:0x9000 (es:bx)
-  mov dh, 2             ; from the boot disk.
-  mov dl, [BOOT_DRIVE]
-  call disk_load
+  mov bx, MSG_REAL_MODE
+  call print_string
 
-  mov dx, [0x9000]      ; Print the first loaded word, which we have
-  call print_hex        ; set below. Should be 0xdada.
-
-  mov dx, [0x9000 + 512] ; Print the first loaded word from the second
-  call print_hex         ; sector. Should be 0xface.
+  call switch_to_pm     ; Switch and never return.
 
   jmp $     
 
 %include "print_string.asm"
-%include "print_string_video.asm"
-%include "print_hex.asm"
-%include "disk_load.asm"
+%include "switch_to_pm.asm"
+%include "define_gdt.asm"
 
-; Global variables
-BOOT_DRIVE: db 0
+; This is where switch_to_pm eventually lands, now in PM.
+BEGIN_PM:
+  
+  mov ebx, MSG_PROT_MODE
+  ;TODO: Implement call print_string_pm
+  
+  jmp $     
+
+; Globals
+MSG_REAL_MODE db "Started in 16-bit Real Mode", 0
+MSG_PROT_MODE db "Successfully landed in 32-bit Protected Mode", 0
 
 ; Bootsector padding
 times 510-($-$$) db 0

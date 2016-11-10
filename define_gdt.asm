@@ -27,7 +27,7 @@
 ; Readable
 ; Accessed
 
-get_start:
+gdt_start:
 
   ; Mandatory null descriptor. Declare two double words of zeros.
   gdt_null:
