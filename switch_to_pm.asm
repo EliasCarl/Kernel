@@ -11,7 +11,8 @@ switch_to_pm:
 
   jmp CODE_SEG:init_pm  ; Make a far jump to the 32-bit code. A far
                         ; jump also flushes pre-fetched, already decoded,
-                        ; real-mode instructions.
+                        ; real-mode instructions. A far jump also specifies
+                        ; the cs for us.
 
 [bits 32]
 
