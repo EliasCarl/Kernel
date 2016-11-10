@@ -12,19 +12,19 @@ print_string_pm:
   pusha
   mov edx, VIDEO_MEMORY
 
-  print_string_pm_loop:
-    mov al, [ebx]
-    mov ah, WHITE_ON_BLACK
-    
-    cmp al, 0
-    je print_string_pm_done
+print_string_pm_loop:
+  mov al, [ebx]
+  mov ah, WHITE_ON_BLACK
 
-    mov [edx], ax
-    add ebx, 1
-    add edx, 2
+  cmp al, 0
+  je print_string_pm_done
 
-    jmp print_string_pm_loop
+  mov [edx], ax
+  add ebx, 1
+  add edx, 2
 
-  print_string_pm_done:
-    popa
-    ret
+  jmp print_string_pm_loop
+
+print_string_pm_done:
+  popa
+  ret

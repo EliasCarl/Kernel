@@ -1,3 +1,5 @@
+[bits 16]
+
 ; Moment of truth. Pull ourselves up to protected mode.
 switch_to_pm:
 
@@ -16,7 +18,7 @@ switch_to_pm:
 
 [bits 32]
 
-; Initialise registers and the stack once in PM.
+; Initialize registers and the stack once in PM.
 init_pm:
   
   mov ax, DATA_SEG      ; Point all segment registers to the new data seg.
