@@ -23,6 +23,13 @@ disk_load:
 disk_error:
   mov bx, DISK_ERROR_MSG
   call print_string
+  
+  push dx           ; Print BIOS error code.
+  mov dx, 0
+  mov dh, ah
+  call print_hex
+  pop dx
+
   jmp $             ; Hang
 
 ; Variables
