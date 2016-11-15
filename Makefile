@@ -26,7 +26,7 @@ kernel_entry.o: kernel_entry.asm
 	nasm $< -f elf64 -o $@
 
 boot_sect.bin: boot_sect.asm
-	nasm $< -f bin -o $@
+	nasm $< -f bin -I "asm/" -o $@
 
 clean:
 	rm -fr *.bin *.dis *.o os.img *.map
