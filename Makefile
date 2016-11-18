@@ -29,6 +29,7 @@ kernel.bin: kernel/kernel_entry.o ${OBJ}
 
 # Apparently the loader outputs in elf64 (x86-64) format and will
 # complain if given an elf32 input. So we explicitly set elf64.
+# TODO: Cross-compiler
 %.o: %.asm
 	nasm $< -f elf64 -o $@
 
